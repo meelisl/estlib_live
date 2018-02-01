@@ -72,18 +72,21 @@ def draw_checkout(co):
         screen.image(url, xy=(10, y), scale='shrinkToFit', align='topleft', max_width=68, max_height=88, raise_error=True)
     except:
         screen.image('nocover.png', xy=(10, y), scale='fit', align='topleft', max_width=68, max_height=88)
+    
+    # Draw library name
+    screen.text(co['library'], color='white', xy=(90, y), font_size=14, max_lines=1, max_width=screen.width-95, align='topleft', font='Roboto-Light.ttf')
 
     # Draw book title
-    screen.text(co['title'], color='white', xy=(90, y), font_size=16, max_lines=1, max_width=screen.width-95, align='topleft', font='Roboto-Light.ttf')
+    screen.text(co['title'], color='white', xy=(90, y + 18), font_size=16, max_lines=1, max_width=screen.width-95, align='topleft')
 
     # Draw book author
-    screen.text(co['author'], color=(250, 250, 250), xy=(90, y + 15), font_size=14, max_lines=1, max_width=200, align='topleft', font='Roboto-Light.ttf')
+    screen.text(co['author'], color=(250, 250, 250), xy=(90, y + 36), font_size=12, max_lines=1, max_width=200, align='topleft', font='Roboto-Light.ttf')
                 
     # Draw gender icon
-    screen.image('%s.png' % (co['sex']), xy=(90, y + 40), align='topleft', max_width=40, max_height=40, scale='fill')
+    screen.image('%s.png' % (co['sex']), xy=(90, y + 50), align='topleft', max_width=40, max_height=40, scale='fill')
     
     # Draw patrons age
-    screen.text(co['age'], xy=(140, y + 50), align='topleft', font_size=18, font='Roboto-Light.ttf', color='white')
+    screen.text(co['age'], xy=(140, y + 60), align='topleft', font_size=18, font='Roboto-Light.ttf', color='white')
     
 
 def draw_checkin(ci):
@@ -100,17 +103,20 @@ def draw_checkin(ci):
     except:
         screen.image('nocover.png', xy=(10, y), scale='fit', align='topleft', max_width=68, max_height=88)
 
+   # Draw library name
+    screen.text(ci['library'], color='black', xy=(90, y), font_size=14, max_lines=1, max_width=screen.width-95, align='topleft', font='Roboto-Light.ttf')
+
     # Draw book title
-    screen.text(ci['title'], color='black', xy=(90, y), font_size=16, max_lines=1, max_width=screen.width-95, align='topleft', font='Roboto-Light.ttf')
+    screen.text(ci['title'], color='black', xy=(90, y + 18), font_size=16, max_lines=1, max_width=screen.width-95, align='topleft')
 
     # Draw book author
-    screen.text(ci['author'], color='gray', xy=(90, y + 15), font_size=14, max_lines=1, max_width=200, align='topleft', font='Roboto-Light.ttf')
+    screen.text(ci['author'], color='black', xy=(90, y + 36), font_size=12, max_lines=1, max_width=200, align='topleft', font='Roboto-Light.ttf')
                 
     # Draw gender icon
-    screen.image('%s.png' % (ci['sex']), xy=(90, y + 40), align='topleft', max_width=40, max_height=40, scale='fill')
+    screen.image('%s.png' % (ci['sex']), xy=(90, y + 50), align='topleft', max_width=40, max_height=40, scale='fill')
     
     # Draw patrons age
-    screen.text(ci['age'], xy=(140, y + 50), align='topleft', font_size=18, font='Roboto-Light.ttf')
+    screen.text(ci['age'], xy=(140, y + 60), align='topleft', font_size=18, font='Roboto-Light.ttf')
 
 
 # Websocket error
