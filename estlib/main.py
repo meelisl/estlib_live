@@ -129,6 +129,12 @@ def on_close(ws):
     
 # Start listening
 def start():
+    
+    
+    # Draw splash screen
+    screen.image('splash.png')
+    screen.update()
+    
     ws.run_forever()
 
 
