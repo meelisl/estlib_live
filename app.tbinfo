@@ -1,0 +1,9 @@
+{
+    "name": "Estonian Libraries Live",
+    "author": "Meelis Lilbok",
+    "caption": "Live feed from Estonian libraries",
+    "version": "1.0",
+    "twitter": "@meelis_lilbok",
+    "website": "https://www.raamatukogud.ee",
+    "background_color": "1db0e9"
+}
