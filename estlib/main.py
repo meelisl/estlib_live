@@ -133,6 +133,8 @@ def draw_checkin(ci):
 # Websocket error
 def on_error(ws, error):
     print 'socker error'
+    ws.close()
+    ws.run_forever()
     
 # Websocket closed
 def on_close(ws):
