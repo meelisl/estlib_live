@@ -8,15 +8,12 @@ from time import sleep
 coverURL = 'https://d3njx7zf7layds.cloudfront.net/BookCoverImages/%s.jpg'
 checkedIn = 0
 checkedOut = 0
+visitors = 0
 checkout=''
 checkin=''
 
 # Set screen brightness
 screen.brightness = 75
-
-@right_button.press
-def on_right():
-    quit()
 
 # Incoming message from server
 def on_message(ws, message):
@@ -40,6 +37,10 @@ def on_message(ws, message):
         
         global checkout
         checkout=j
+        
+    if t == 'visitor':
+        global visitors
+        visitors =int(j['visitors'])
 
     # Fill screen
     screen.fill(color='white')
@@ -62,7 +63,7 @@ def on_message(ws, message):
         draw_checkin(checkin)
 
     # Draw counters
-    screen.text('Checked out: %s     Checked in: %s' % (checkedOut, checkedIn), xy=(10, 240), align='bottomleft', color='black', font_size=11, font='fonts/Roboto-Light.ttf')
+    screen.text('Checked out: %s     Checked in: %s     Visitors: %s' % (checkedOut, checkedIn, visitors), xy=(10, 240), align='bottomleft', color='black', font_size=11, font='fonts/Roboto-Light.ttf')
 
     # Update screen
     screen.update()
@@ -133,9 +134,7 @@ def draw_checkin(ci):
 # Websocket error
 def on_error(ws, error):
     print 'socker error'
-    ws.close()
-    ws.run_forever()
-    
+
 # Websocket closed
 def on_close(ws):
     print 'socket closed'
@@ -154,7 +153,7 @@ def areLibrariesOpen():
         else:
             return True
     else:
-        return False
+        return True
 
 # Show libraries closed message
 def showLibrariesClosed():
