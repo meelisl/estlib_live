@@ -14,6 +14,10 @@ checkin=''
 # Set screen brightness
 screen.brightness = 75
 
+@right_button.press
+def on_right():
+    quit()
+
 # Incoming message from server
 def on_message(ws, message):
     
