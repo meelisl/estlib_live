@@ -38,6 +38,7 @@ def on_message(ws, message):
         global checkout
         checkout=j
         
+    # Get visitor count
     if t == 'visitor':
         global visitors
         visitors =int(j['visitors'])
@@ -166,7 +167,7 @@ def showLibrariesClosed():
         localTime=r.text
         screen.fill(color='white')
         screen.text(
-            'Hello there!\r\nIt is %s in Estonia and all Libraries are closed!\r\nBest time to run this app is from 06:00AM UTC to 05:00PM UTC!' % (localTime),
+            'Hello there!\r\nIt is %s in Estonia and all Libraries are closed!\r\nBest time to run this App is from 06:00AM UTC to 05:00PM UTC!' % (localTime),
             align='center', font_size=20, font='fonts/Roboto-Light.ttf', color='black')
         screen.update()
         sleep(5)
