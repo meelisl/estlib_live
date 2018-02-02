@@ -1,9 +1,9 @@
 {
     "name": "Estonian Libraries Live",
     "author": "Meelis Lilbok",
-    "caption": "Live feed from Estonian libraries",
-    "version": "1.0",
+    "caption": "Live feed from Estonian Libraries",
+    "version": "1.2",
     "twitter": "@meelis_lilbok",
     "website": "https://www.raamatukogud.ee",
-    "background_color": "1db0e9"
+    "background_color": "505050"
 }
