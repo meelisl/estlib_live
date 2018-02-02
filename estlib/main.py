@@ -2,65 +2,71 @@ import tingbot
 from tingbot import *
 import websocket
 import json
+import requests
+from time import sleep
 
 coverURL = 'https://d3njx7zf7layds.cloudfront.net/BookCoverImages/%s.jpg'
 checkedIn = 0
 checkedOut = 0
-
-
 checkout=''
 checkin=''
 
 # Set screen brightness
 screen.brightness = 75
 
-
 # Incoming message from server
 def on_message(ws, message):
+    
     # Parse JSON message
     j = json.loads(message)
 
-    # Increment counters
+    # Increment counter and set checkin message
     t = j['message']
     if t == 'checkin':
         global checkedIn
         checkedIn += 1
+        
         global checkin
         checkin=j
 
+    # Increment counter and set checkout message
     if t == 'checkout':
         global checkedOut
         checkedOut += 1
+        
         global checkout
         checkout=j
 
     # Fill screen
     screen.fill(color='white')
     
+    # Draw dark rectangle
     screen.rectangle(xy=(0, 0), size=(screen.width, 128), color=(51, 52, 52))
 
-    # Draw title frame
+    # Draw title rectangle
     screen.rectangle(xy=(0, 0), size=(screen.width, 25), color=(53, 126, 212))
 
-    # Draw title
+    # Draw title text
     screen.text('Estonian Libraries Live', xy=(10,2), align='topleft', font_size=18, color='white')
     
+    # Draw checkout, if set
+    if len(checkout)>0:
+        draw_checkout(checkout)
     
-
-    # Draw checkout
-    draw_checkout(checkout)
-    
-    # Draw checkin
-    draw_checkin(checkin)
+    # Draw checkin, if set
+    if len(checkin)>0:
+        draw_checkin(checkin)
 
     # Draw counters
-    screen.text('Checked out: %s     Checked in: %s' % (checkedOut, checkedIn), xy=(10, 240), align='bottomleft', color='red', font_size=11)
+    screen.text('Checked out: %s     Checked in: %s' % (checkedOut, checkedIn), xy=(10, 240), align='bottomleft', color='black', font_size=11, font='fonts/Roboto-Light.ttf')
 
+    # Update screen
     screen.update()
 
+# Draws checkout
 def draw_checkout(co):
     
-    
+    # Inital value for top
     y = 32
     
     # Draw image frame
@@ -71,26 +77,27 @@ def draw_checkout(co):
     try:
         screen.image(url, xy=(10, y), scale='shrinkToFit', align='topleft', max_width=68, max_height=88, raise_error=True)
     except:
-        screen.image('nocover.png', xy=(10, y), scale='fit', align='topleft', max_width=68, max_height=88)
+        screen.image('assets/nocover.png', xy=(10, y), scale='fit', align='topleft', max_width=68, max_height=88)
     
     # Draw library name
-    screen.text(co['library'], color='white', xy=(90, y), font_size=14, max_lines=1, max_width=screen.width-95, align='topleft', font='Roboto-Light.ttf')
+    screen.text(co['library'], color='white', xy=(90, y), font_size=14, max_lines=1, max_width=screen.width-95, align='topleft', font='fonts/Roboto-Light.ttf')
 
     # Draw book title
     screen.text(co['title'], color='white', xy=(90, y + 18), font_size=16, max_lines=1, max_width=screen.width-95, align='topleft')
 
     # Draw book author
-    screen.text(co['author'], color=(250, 250, 250), xy=(90, y + 36), font_size=12, max_lines=1, max_width=200, align='topleft', font='Roboto-Light.ttf')
+    screen.text(co['author'], color=(250, 250, 250), xy=(90, y + 36), font_size=12, max_lines=1, max_width=200, align='topleft', font='fonts/Roboto-Light.ttf')
                 
     # Draw gender icon
-    screen.image('%s.png' % (co['sex']), xy=(90, y + 50), align='topleft', max_width=40, max_height=40, scale='fill')
+    screen.image('assets/%s.png' % (co['sex']), xy=(90, y + 50), align='topleft', max_width=40, max_height=40, scale='fill')
     
     # Draw patrons age
-    screen.text(co['age'], xy=(140, y + 60), align='topleft', font_size=18, font='Roboto-Light.ttf', color='white')
+    screen.text(co['age'], xy=(140, y + 60), align='topleft', font_size=18, font='fonts/Roboto-Light.ttf', color='white')
     
-
+# Draw checkin
 def draw_checkin(ci):
     
+    # Initial value for top
     y = 132
     
      # Draw image frame
@@ -101,22 +108,22 @@ def draw_checkin(ci):
     try:
         screen.image(url, xy=(10, y), scale='shrinkToFit', align='topleft', max_width=68, max_height=88, raise_error=True)
     except:
-        screen.image('nocover.png', xy=(10, y), scale='fit', align='topleft', max_width=68, max_height=88)
+        screen.image('assets/nocover.png', xy=(10, y), scale='fit', align='topleft', max_width=68, max_height=88)
 
    # Draw library name
-    screen.text(ci['library'], color='black', xy=(90, y), font_size=14, max_lines=1, max_width=screen.width-95, align='topleft', font='Roboto-Light.ttf')
+    screen.text(ci['library'], color='black', xy=(90, y), font_size=14, max_lines=1, max_width=screen.width-95, align='topleft', font='fonts/Roboto-Light.ttf')
 
     # Draw book title
     screen.text(ci['title'], color='black', xy=(90, y + 18), font_size=16, max_lines=1, max_width=screen.width-95, align='topleft')
 
     # Draw book author
-    screen.text(ci['author'], color='black', xy=(90, y + 36), font_size=12, max_lines=1, max_width=200, align='topleft', font='Roboto-Light.ttf')
+    screen.text(ci['author'], color='black', xy=(90, y + 36), font_size=12, max_lines=1, max_width=200, align='topleft', font='fonts/Roboto-Light.ttf')
                 
     # Draw gender icon
-    screen.image('%s.png' % (ci['sex']), xy=(90, y + 50), align='topleft', max_width=40, max_height=40, scale='fill')
+    screen.image('assets/%s.png' % (ci['sex']), xy=(90, y + 50), align='topleft', max_width=40, max_height=40, scale='fill')
     
     # Draw patrons age
-    screen.text(ci['age'], xy=(140, y + 60), align='topleft', font_size=18, font='Roboto-Light.ttf')
+    screen.text(ci['age'], xy=(140, y + 60), align='topleft', font_size=18, font='fonts/Roboto-Light.ttf')
 
 
 # Websocket error
@@ -127,15 +134,66 @@ def on_error(ws, error):
 def on_close(ws):
     print 'socket closed'
     
+# Get local hour in Estonia from webservice
+def areLibrariesOpen():
+    
+    # Get request
+    r = requests.get('http://www.raamatukogud.ee/helper.asp?action=hour')
+    
+    # If status is ok, get hour value
+    if r.status_code==200:
+        hour=int(r.text)
+        if hour<7 or hour>=19:
+            return False
+        else:
+            return True
+    else:
+        return False
+
+# Show libraries closed message
+def showLibrariesClosed():
+    
+    # Get request
+    r = requests.get('http://www.raamatukogud.ee/helper.asp?action=time')
+    
+    # If status is ok, get local time text and show message for 5 seconds
+    if r.status_code==200:
+        localTime=r.text
+        screen.fill(color='white')
+        screen.text(
+            'Hello there!\r\nIt is %s in Estonia and all Libraries are closed!\r\nBest time to run this app is from 06:00AM UTC to 05:00PM UTC!' % (localTime),
+            align='center', font_size=20, font='fonts/Roboto-Light.ttf', color='black')
+        screen.update()
+        sleep(5)
+        
+        # Show message for 2 seconds
+        screen.fill(color='white')
+        screen.text('See you soon!', color='black', font_size=30)
+        screen.update()
+        sleep(2)
+        
+        # Exit app
+        quit()
+    
 # Start listening
 def start():
     
-    
-    # Draw splash screen
-    screen.image('splash.png')
+    # Draw splash screen for 3 seconds
+    screen.image('assets/splash.png')
     screen.update()
+    sleep(3)
     
-    ws.run_forever()
+    # Check, if libraries are open
+    if areLibrariesOpen():
+        screen.fill(color='white')
+        screen.text('Waiting for stream', color='black')
+        screen.update()
+        
+        # Start listening
+        ws.run_forever()
+    else:
+        # Show libraries closed message
+        showLibrariesClosed()
 
 
 # Create websocket
@@ -145,5 +203,8 @@ ws = websocket.WebSocketApp("wss://live.webriks.ee/lcs/default.ashx",
                             on_error=on_error,
                             on_close=on_close)
 
-# Start app    
-tingbot.run(start)
+# Start app
+start()
+
+
+
