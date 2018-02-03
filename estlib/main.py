@@ -4,6 +4,8 @@ import websocket
 import json
 import requests
 from time import sleep
+import threading
+
 
 coverURL = 'https://d3njx7zf7layds.cloudfront.net/BookCoverImages/%s.jpg'
 checkedIn = 0
@@ -14,6 +16,14 @@ checkin=''
 
 # Set screen brightness
 screen.brightness = 75
+
+
+def sendPong():
+    try:
+        ws.send('PONG')
+        t = threading.Timer(60, sendPong).start()
+    except:
+        print 'error sending pong'
 
 # Incoming message from server
 def on_message(ws, message):
@@ -134,11 +144,14 @@ def draw_checkin(ci):
 
 # Websocket error
 def on_error(ws, error):
-    print 'socker error'
+    print 'socket error'
 
 # Websocket closed
 def on_close(ws):
     print 'socket closed'
+    
+def on_open(ws):
+    sendPong()
     
 # Get local hour in Estonia from webservice
 def areLibrariesOpen():
@@ -208,6 +221,8 @@ ws = websocket.WebSocketApp("wss://live.webriks.ee/lcs/default.ashx",
                             on_message=on_message,
                             on_error=on_error,
                             on_close=on_close)
+
+ws.on_open=on_open
 
 # Start app
 start()
