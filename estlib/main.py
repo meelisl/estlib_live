@@ -6,18 +6,17 @@ import requests
 from time import sleep
 import threading
 
-
+# Book cover from Cloudfront by ISBN
 coverURL = 'https://d3njx7zf7layds.cloudfront.net/BookCoverImages/%s.jpg'
+
+# Global variables
 checkedIn = 0
 checkedOut = 0
 visitors = 0
 checkout=''
 checkin=''
 
-# Set screen brightness
-screen.brightness = 75
-
-
+# Send 'PONG' to server after every 60 seconds, so server knows you are alive :)
 def sendPong():
     try:
         ws.send('PONG')
@@ -30,10 +29,12 @@ def on_message(ws, message):
     
     # Parse JSON message
     j = json.loads(message)
+    
+    # Get message type
+    messageType = j['message']
 
     # Increment counter and set checkin message
-    t = j['message']
-    if t == 'checkin':
+    if messageType == 'checkin':
         global checkedIn
         checkedIn += 1
         
@@ -41,7 +42,7 @@ def on_message(ws, message):
         checkin=j
 
     # Increment counter and set checkout message
-    if t == 'checkout':
+    if messageType == 'checkout':
         global checkedOut
         checkedOut += 1
         
@@ -49,7 +50,7 @@ def on_message(ws, message):
         checkout=j
         
     # Get visitor count
-    if t == 'visitor':
+    if messageType == 'visitor':
         global visitors
         visitors =int(j['visitors'])
 
@@ -150,6 +151,7 @@ def on_error(ws, error):
 def on_close(ws):
     print 'socket closed'
     
+# Websocket open
 def on_open(ws):
     sendPong()
     
@@ -172,24 +174,24 @@ def areLibrariesOpen():
 # Show libraries closed message
 def showLibrariesClosed():
     
-    # Get request
+    # Get local time string from webservice
     r = requests.get('http://www.raamatukogud.ee/helper.asp?action=time')
     
-    # If status is ok, get local time text and show message for 5 seconds
+    # If status is ok, show message for 15 seconds
     if r.status_code==200:
         localTime=r.text
         screen.fill(color='white')
         screen.text(
-            'Hello there!\r\nIt is %s in Estonia and all Libraries are closed!\r\nBest time to run this App is from 06:00AM UTC to 05:00PM UTC!' % (localTime),
+            'Hello there!\r\nIt is %s in Estonia and all Libraries are closed!\r\nRun this App on workdays Mon-Fri, from 06:00 AM to 05:00 PM (UTC)!' % (localTime),
             align='center', font_size=20, font='fonts/Roboto-Light.ttf', color='black')
         screen.update()
-        sleep(5)
+        sleep(15)
         
-        # Show message for 2 seconds
+        # Show message for 5 seconds
         screen.fill(color='white')
         screen.text('See you soon!', color='black', font_size=30)
         screen.update()
-        sleep(2)
+        sleep(3)
         
         # Exit app
         quit()
@@ -214,6 +216,8 @@ def start():
         # Show libraries closed message
         showLibrariesClosed()
 
+# Set screen brightness
+screen.brightness = 75
 
 # Create websocket
 websocket.enableTrace(True)
