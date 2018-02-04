@@ -66,6 +66,9 @@ def on_message(ws, message):
     # Draw title rectangle
     #screen.rectangle(xy=(0, 0), size=(screen.width, 25), color=(53, 126, 212))
 
+    # Draw title text shadow
+    screen.text('Estonian Libraries Live', xy=(11,3), align='topleft', font_size=18, color='black')
+    
     # Draw title text
     screen.text('Estonian Libraries Live', xy=(10,2), align='topleft', font_size=18, color='white')
     
