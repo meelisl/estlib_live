@@ -57,11 +57,14 @@ def on_message(ws, message):
     # Fill screen
     screen.fill(color='white')
     
+    # Draw background image (Estoninan flag)
+    screen.image('assets/bgflag.png')
+    
     # Draw dark rectangle
-    screen.rectangle(xy=(0, 0), size=(screen.width, 128), color=(51, 52, 52))
+    #screen.rectangle(xy=(0, 0), size=(screen.width, 128), color=(0, 0, 0))
 
     # Draw title rectangle
-    screen.rectangle(xy=(0, 0), size=(screen.width, 25), color=(53, 126, 212))
+    #screen.rectangle(xy=(0, 0), size=(screen.width, 25), color=(53, 126, 212))
 
     # Draw title text
     screen.text('Estonian Libraries Live', xy=(10,2), align='topleft', font_size=18, color='white')
@@ -103,7 +106,7 @@ def draw_checkout(co):
     screen.text(co['title'], color='white', xy=(90, y + 18), font_size=16, max_lines=1, max_width=screen.width-95, align='topleft')
 
     # Draw book author
-    screen.text(co['author'], color=(250, 250, 250), xy=(90, y + 36), font_size=12, max_lines=1, max_width=200, align='topleft', font='fonts/Roboto-Light.ttf')
+    screen.text(co['author'], color='white', xy=(90, y + 36), font_size=12, max_lines=1, max_width=200, align='topleft', font='fonts/Roboto-Light.ttf')
                 
     # Draw gender icon
     screen.image('assets/%s.png' % (co['sex']), xy=(90, y + 50), align='topleft', max_width=40, max_height=40, scale='fill')
@@ -217,7 +220,7 @@ def start():
         showLibrariesClosed()
 
 # Set screen brightness
-screen.brightness = 75
+screen.brightness = 100
 
 # Create websocket
 websocket.enableTrace(True)
